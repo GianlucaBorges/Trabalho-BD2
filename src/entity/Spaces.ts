@@ -8,8 +8,6 @@ import {
   PrimaryColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Events } from "./Events";
-import { Projects } from "./Projects";
 import { Agents } from "./Agents";
 
 @Entity()
@@ -32,7 +30,7 @@ export class Spaces {
   @UpdateDateColumn({ nullable: true })
   update_timestamp: Date;
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   event_occurrences: number[];
 
   @Column({ nullable: true })
@@ -44,7 +42,7 @@ export class Spaces {
   @Column({ nullable: true })
   email: string;
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Spaces, (space) => space.id)
   children: number[];
 

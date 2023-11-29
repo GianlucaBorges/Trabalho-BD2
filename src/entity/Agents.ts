@@ -34,19 +34,19 @@ export class Agents {
   @Column({ nullable: true })
   terms: string;
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Agents, (agent) => agent.id)
   children: number[];
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Spaces, (space) => space.id)
   spaces: number[];
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Events, (event) => event.id)
   events: number[];
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Projects, (project) => project.id)
   projects: number[];
 }
