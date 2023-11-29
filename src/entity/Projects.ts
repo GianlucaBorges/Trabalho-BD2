@@ -39,7 +39,7 @@ export class Projects {
   @JoinColumn({ name: "parent_id" })
   parent: number;
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Projects, (project) => project.id)
   children: number[];
 
@@ -48,7 +48,7 @@ export class Projects {
   @JoinColumn({ name: "owner_id" })
   owner: string;
 
-  @Column({ nullable: true })
+  @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Events, (event) => event.id)
   events: number[];
 }
