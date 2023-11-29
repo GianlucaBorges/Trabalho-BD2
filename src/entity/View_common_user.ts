@@ -18,7 +18,7 @@ import { DataSource, ViewColumn, ViewEntity } from "typeorm";
     .leftJoin("Projects", "projects", "projects.id = events.project_id")
 })
 
-export default class View_commin_user {
+export default class View_common_user {
   @ViewColumn()
   name: string;
 
