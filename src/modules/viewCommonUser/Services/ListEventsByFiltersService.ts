@@ -20,7 +20,7 @@ export default class ListEventsByFiltersService {
     }
 
     if (event_name) {
-      queryBuilder = queryBuilder.andWhere('event_name LIKE :event_name', { event_name });
+      queryBuilder = queryBuilder.andWhere('name LIKE :event_name', { event_name });
     }
 
     if (space_name) {
@@ -28,7 +28,7 @@ export default class ListEventsByFiltersService {
     }
 
     if (starts_on) {
-      queryBuilder = queryBuilder.andWhere('starts_on = :starts_on', { starts_on });
+      queryBuilder = queryBuilder.andWhere('starts_on >= :starts_on', { starts_on });
     }
 
     let listEvents = await queryBuilder.getMany();
