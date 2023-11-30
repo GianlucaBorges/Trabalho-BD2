@@ -1,8 +1,8 @@
 import { Router } from "express";
-import classificacaoEtariaRouter from "../modules/classificacaoEtaria/Routes/faixaEtaria.routes";
+import viewCommonUserRouter from "../modules/viewCommonUser/Routes/viewCommonUser.routes";
 
 const routes = Router();
 
-routes.use("/classificacao_etaria", classificacaoEtariaRouter);
+routes.use("/view_common_user", viewCommonUserRouter); 
 
 export default routes;
