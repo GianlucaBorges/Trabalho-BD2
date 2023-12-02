@@ -3,10 +3,13 @@ import express = require("express");
 import AppError from "./errors/AppError";
 import { NextFunction, Request, Response } from "express";
 import "dotenv/config";
+import cors = require("cors");
 
 const app = express();
 
 app.use(routes);
+
+app.use(cors())
 
 app.use(express.json());
 
