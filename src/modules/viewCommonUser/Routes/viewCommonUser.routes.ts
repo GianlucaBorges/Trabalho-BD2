@@ -5,7 +5,7 @@ const viewCommonUserRouter = Router();
 const viewCommonUserController = new ViewCommonUserController();
 
 viewCommonUserRouter.get(
-  "/classificacao-etaria",
+  "/clas-etaria",
   viewCommonUserController.listClassificacaoEtaria
 );
 viewCommonUserRouter.get(
