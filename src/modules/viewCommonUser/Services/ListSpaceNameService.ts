@@ -14,8 +14,10 @@ export default class ListSpaceNameService {
       .distinct(true)
       .getRawMany();
 
-    listSpaceName.forEach((item) => {
-      return (item.space_name = item.space_name.trim());
+    listSpaceName = listSpaceName.map((item) => {
+      return {
+        name: item.space_name.trim(),
+      };
     });
 
     return listSpaceName;

@@ -7,7 +7,9 @@ interface IClassificacaoEtaria {
 
 export default class ListClassificacaoEtariaService {
   public async execute(): Promise<IClassificacaoEtaria[]> {
-    let listClassificacaoEtaria = await AppDataSource.getRepository(View_common_user)
+    let listClassificacaoEtaria = await AppDataSource.getRepository(
+      View_common_user
+    )
       .createQueryBuilder("view_common_user")
       .select("classificacao_etaria")
       .orderBy("classificacao_etaria", "ASC")
@@ -16,6 +18,12 @@ export default class ListClassificacaoEtariaService {
 
     listClassificacaoEtaria = listClassificacaoEtaria.filter((item) => {
       return item.classificacao_etaria !== null;
+    });
+
+    listClassificacaoEtaria = listClassificacaoEtaria.map((item) => {
+      return {
+        name: item.classificacao_etaria,
+      };
     });
 
     return listClassificacaoEtaria;

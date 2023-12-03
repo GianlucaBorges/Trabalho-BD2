@@ -14,8 +14,10 @@ export default class ListEventNameService {
       .distinct(true)
       .getRawMany();
 
-    listEventName.forEach((item) => {
-      return (item.name = item.name.trim());
+    listEventName = listEventName.map((item) => {
+      return {
+        name: item.name.trim(),
+      };
     });
 
     return listEventName;
