@@ -4,6 +4,8 @@ import ListClassificacaoEtariaService from "../Services/ListClassificacaoEtariaS
 import ListEventNameService from "../Services/ListEventNameService";
 import ListSpaceNameService from "../Services/ListSpaceNameService";
 import ListEventsByFiltersPaginatedService from "../Services/ListEventsByFiltersPaginatedService";
+import DownloadTableCsvService from "../Services/DownloadTableCsvService";
+import AppError from "../../../errors/AppError";
 
 export class ViewCommonUserController {
   async listClassificacaoEtaria(
@@ -58,5 +60,23 @@ export class ViewCommonUserController {
     const eventsPaginated = await listEventsByFiltersPaginatedService.execute(queryParams);
 
     return response.json(eventsPaginated);
+  }
+
+  async downloadTableCsv(request: Request, response: Response): Promise<any> {
+    const queryParams = request.query;
+    const downloadTableCsvService = new DownloadTableCsvService();
+
+    try {
+      const filePath = await downloadTableCsvService.execute(queryParams);
+
+      return response.download(filePath);
+    } catch (error) {
+      if (error instanceof AppError) {
+        return response.status(error.statusCode).json({
+          status: "error",
+          message: error.message,
+        });
+      }
+    }
   }
 }

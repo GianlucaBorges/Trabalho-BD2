@@ -31,5 +31,9 @@ viewProdutorRouter.get(
   "/events/paginated",
   viewProdutorController.findEventsPaginated
 );
+viewProdutorRouter.get(
+  "/events/csv",
+  viewProdutorController.downloadTableCsv
+);
 
 export default viewProdutorRouter;
