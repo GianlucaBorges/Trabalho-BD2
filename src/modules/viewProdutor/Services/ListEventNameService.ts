@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source";
-import View_common_user from "../../../entity/View_common_user";
+import View_produtor from "../../../entity/View_produtor";
 
 interface IEventName {
   name: string;
@@ -7,14 +7,14 @@ interface IEventName {
 
 export default class ListEventNameService {
   public async execute(): Promise<IEventName[]> {
-    let listEventName = await AppDataSource.getRepository(View_common_user)
-      .createQueryBuilder("view_common_user")
+    let listEventName: any = await AppDataSource.getRepository(View_produtor)
+      .createQueryBuilder("view_produtor")
       .select("name")
       .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
-    listEventName = listEventName.map((item) => {
+    listEventName = listEventName.map((item: any) => {
       return {
         name: item.name.trim(),
       };

@@ -5,7 +5,7 @@ const viewCommonUserRouter = Router();
 const viewCommonUserController = new ViewCommonUserController();
 
 viewCommonUserRouter.get(
-  "/classificacao-etaria",
+  "/clas-etaria",
   viewCommonUserController.listClassificacaoEtaria
 );
 viewCommonUserRouter.get(
@@ -17,5 +17,9 @@ viewCommonUserRouter.get(
   viewCommonUserController.listSpaceNames
 );
 viewCommonUserRouter.get("/events", viewCommonUserController.findEvents);
+viewCommonUserRouter.get(
+  "/events/paginated",
+  viewCommonUserController.findEventsPaginated
+);
 
 export default viewCommonUserRouter;

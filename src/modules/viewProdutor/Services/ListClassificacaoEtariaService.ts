@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source";
-import View_common_user from "../../../entity/View_common_user";
+import View_produtor from "../../../entity/View_produtor";
 
 interface IClassificacaoEtaria {
   classificacao_etaria: string;
@@ -8,9 +8,9 @@ interface IClassificacaoEtaria {
 export default class ListClassificacaoEtariaService {
   public async execute(): Promise<IClassificacaoEtaria[]> {
     let listClassificacaoEtaria = await AppDataSource.getRepository(
-      View_common_user
+      View_produtor
     )
-      .createQueryBuilder("view_common_user")
+      .createQueryBuilder("view_produtor")
       .select("classificacao_etaria")
       .orderBy("classificacao_etaria", "ASC")
       .distinct(true)

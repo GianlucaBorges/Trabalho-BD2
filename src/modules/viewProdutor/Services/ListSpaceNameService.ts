@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source";
-import View_common_user from "../../../entity/View_common_user";
+import View_produtor from "../../../entity/View_produtor";
 
 interface ISpaceName {
   name: string;
@@ -7,8 +7,8 @@ interface ISpaceName {
 
 export default class ListSpaceNameService {
   public async execute(): Promise<ISpaceName[]> {
-    let listSpaceName = await AppDataSource.getRepository(View_common_user)
-      .createQueryBuilder("view_common_user")
+    let listSpaceName = await AppDataSource.getRepository(View_produtor)
+      .createQueryBuilder("view_produtor")
       .select("space_name")
       .orderBy("space_name", "ASC")
       .distinct(true)

@@ -4,6 +4,7 @@
    "description": "Awesome project developed with TypeORM.",
    "type": "commonjs",
    "devDependencies": {
+      "@types/cors": "^2.8.17",
       "@types/node": "^16.11.10",
       "dotenv": "^16.3.1",
       "ts-node": "10.7.0",
