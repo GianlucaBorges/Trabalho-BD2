@@ -7,6 +7,7 @@ import ListSpaceOwnerNameService from "../Services/ListSpaceOwnerNameService";
 import ListEventOwnerNameService from "../Services/ListEventOwnerNameService";
 import ListProjectNameService from "../Services/ListProjectNameService";
 import ListProjectOwnerNameService from "../Services/ListProjectOwnerNameService";
+import ListEventsByFiltersPaginatedService from "../Services/ListEventsByFiltersPaginatedService";
 
 export class ViewProdutorController {
   async listClassificacaoEtaria(
@@ -87,10 +88,24 @@ export class ViewProdutorController {
 
   async findEvents(request: Request, response: Response): Promise<Response> {
     const queryParams = request.query;
+    
     const listEventsbyFiltersService = new ListEventsByFiltersService();
 
     const events = await listEventsbyFiltersService.execute(queryParams);
 
     return response.json(events);
+  }
+
+  async findEventsPaginated(
+    request: Request,
+    response: Response
+  ): Promise<Response> {
+    const queryParams = request.query;
+
+    const listEventsByFiltersPaginatedService = new ListEventsByFiltersPaginatedService();
+
+    const eventsPaginated = await listEventsByFiltersPaginatedService.execute(queryParams);
+
+    return response.json(eventsPaginated);
   }
 }
