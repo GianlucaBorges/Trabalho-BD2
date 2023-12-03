@@ -20,6 +20,12 @@ export default class ListClassificacaoEtariaService {
       return item.classificacao_etaria !== null;
     });
 
+    listClassificacaoEtaria = listClassificacaoEtaria.map((item) => {
+      return {
+        name: item.classificacao_etaria,
+      };
+    });
+
     return listClassificacaoEtaria;
   }
 }

@@ -14,9 +14,11 @@ export default class ListSpaceOwnerNameService {
       .distinct(true)
       .getRawMany();
 
-    listSpaceOwnerName.forEach((item) => {
+    listSpaceOwnerName = listSpaceOwnerName.map((item) => {
       if (item.dono_espaco !== null) {
-        return (item.dono_espaco = item.dono_espaco.trim());
+        return {
+          name: item.dono_espaco.trim(),
+        }
       }
     });
 

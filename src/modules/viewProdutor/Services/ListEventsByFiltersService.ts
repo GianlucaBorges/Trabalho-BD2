@@ -92,9 +92,9 @@ export default class ListEventsByFiltersService {
       );
     }
 
-    let listEvents = await queryBuilder.getMany();
+    let listEvents: any = await queryBuilder.getMany();
 
-    listEvents.forEach((item) => {
+    listEvents = listEvents.map((item: any) => {
       return {
         event_name: item.name.trim(),
         short_description: (item.short_description) ? item.short_description.trim() : null,

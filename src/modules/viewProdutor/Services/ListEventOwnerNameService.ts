@@ -14,9 +14,11 @@ export default class ListEventOwnerNameService {
       .distinct(true)
       .getRawMany();
 
-    listEventOwnerName.forEach((item) => {
+    listEventOwnerName = listEventOwnerName.map((item) => {
       if (item.dono_evento !== null) {
-        return (item.dono_evento = item.dono_evento.trim());
+        return {
+          name: item.dono_evento.trim(),
+        }
       }
     });
 

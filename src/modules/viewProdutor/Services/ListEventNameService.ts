@@ -7,15 +7,17 @@ interface IEventName {
 
 export default class ListEventNameService {
   public async execute(): Promise<IEventName[]> {
-    let listEventName = await AppDataSource.getRepository(View_produtor)
+    let listEventName: any = await AppDataSource.getRepository(View_produtor)
       .createQueryBuilder("view_produtor")
       .select("name")
       .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
-    listEventName.forEach((item) => {
-      return (item.name = item.name.trim());
+    listEventName = listEventName.map((item: any) => {
+      return {
+        name: item.name.trim(),
+      };
     });
 
     return listEventName;

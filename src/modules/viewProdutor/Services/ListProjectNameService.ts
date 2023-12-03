@@ -14,9 +14,11 @@ export default class ListProjectNameService {
       .distinct(true)
       .getRawMany();
 
-    listProjectName.forEach((item) => {
+    listProjectName = listProjectName.map((item) => {
       if (item.project_name !== null) {
-        return (item.project_name = item.project_name.trim());
+        return {
+          name: item.project_name.trim(),
+        }
       }
     });
 

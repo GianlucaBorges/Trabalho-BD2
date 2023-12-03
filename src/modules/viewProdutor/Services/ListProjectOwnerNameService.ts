@@ -14,9 +14,11 @@ export default class ListProjectOwnerNameService {
       .distinct(true)
       .getRawMany();
 
-    listProjectOwnerName.forEach((item) => {
+    listProjectOwnerName = listProjectOwnerName.map((item) => {
       if (item.dono_projeto !== null) {
-        return (item.dono_projeto = item.dono_projeto.trim());
+        return {
+          name: item.dono_projeto.trim(),
+        };
       }
     });
 
