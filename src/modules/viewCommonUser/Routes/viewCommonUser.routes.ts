@@ -21,5 +21,9 @@ viewCommonUserRouter.get(
   "/events/paginated",
   viewCommonUserController.findEventsPaginated
 );
+viewCommonUserRouter.get(
+  "/events/csv",
+  viewCommonUserController.downloadTableCsv
+);
 
 export default viewCommonUserRouter;

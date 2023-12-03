@@ -125,7 +125,7 @@ export default class ListEventsByFiltersPaginatedService {
         ends_at: item.ends_at,
         space_name: item.space_name.trim(),
         location: item.location,
-        sd_space: item.sd_space,
+        sd_space: item.sd_space ? item.sd_space.trim() : null,
         telefone_espaco: item.telefone_espaco,
         email_espaco: item.email_espaco,
         horario_funcionamento: item.horario_funcionamento,

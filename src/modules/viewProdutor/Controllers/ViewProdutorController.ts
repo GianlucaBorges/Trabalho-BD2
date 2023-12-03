@@ -8,6 +8,8 @@ import ListEventOwnerNameService from "../Services/ListEventOwnerNameService";
 import ListProjectNameService from "../Services/ListProjectNameService";
 import ListProjectOwnerNameService from "../Services/ListProjectOwnerNameService";
 import ListEventsByFiltersPaginatedService from "../Services/ListEventsByFiltersPaginatedService";
+import DownloadTableCsvService from "../Services/DownloadTableCsvService";
+import AppError from "../../../errors/AppError";
 
 export class ViewProdutorController {
   async listClassificacaoEtaria(
@@ -88,7 +90,7 @@ export class ViewProdutorController {
 
   async findEvents(request: Request, response: Response): Promise<Response> {
     const queryParams = request.query;
-    
+
     const listEventsbyFiltersService = new ListEventsByFiltersService();
 
     const events = await listEventsbyFiltersService.execute(queryParams);
@@ -102,10 +104,31 @@ export class ViewProdutorController {
   ): Promise<Response> {
     const queryParams = request.query;
 
-    const listEventsByFiltersPaginatedService = new ListEventsByFiltersPaginatedService();
+    const listEventsByFiltersPaginatedService =
+      new ListEventsByFiltersPaginatedService();
 
-    const eventsPaginated = await listEventsByFiltersPaginatedService.execute(queryParams);
+    const eventsPaginated = await listEventsByFiltersPaginatedService.execute(
+      queryParams
+    );
 
     return response.json(eventsPaginated);
+  }
+
+  async downloadTableCsv(request: Request, response: Response): Promise<any> {
+    const queryParams = request.query;
+    const downloadTableCsvService = new DownloadTableCsvService();
+
+    try {
+      const filePath = await downloadTableCsvService.execute(queryParams);
+
+      return response.download(filePath);
+    } catch (error) {
+      if (error instanceof AppError) {
+        return response.status(error.statusCode).json({
+          status: "error",
+          message: error.message,
+        });
+      }
+    }
   }
 }
