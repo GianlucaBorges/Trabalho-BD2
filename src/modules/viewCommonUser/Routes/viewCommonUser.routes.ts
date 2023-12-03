@@ -17,5 +17,9 @@ viewCommonUserRouter.get(
   viewCommonUserController.listSpaceNames
 );
 viewCommonUserRouter.get("/events", viewCommonUserController.findEvents);
+viewCommonUserRouter.get(
+  "/events/paginated",
+  viewCommonUserController.findEventsPaginated
+);
 
 export default viewCommonUserRouter;
