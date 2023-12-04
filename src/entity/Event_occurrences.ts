@@ -1,20 +1,15 @@
 import {
   Column,
-  CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryColumn,
-  UpdateDateColumn,
 } from "typeorm";
 import { Events } from "./Events";
-import { Projects } from "./Projects";
 import { Spaces } from "./Spaces";
 
 @Entity()
-export class Agents {
+export class Event_occurrences {
   @PrimaryColumn()
   id: number;
 
@@ -31,7 +26,7 @@ export class Agents {
   frequency: string;
 
   @Column({ nullable: true })
-  separariton: number;
+  separation: number;
 
   @Column()
   @OneToOne(() => Events, (event) => event.id)

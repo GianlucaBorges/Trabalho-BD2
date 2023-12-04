@@ -36,7 +36,7 @@ import { DataSource, ViewColumn, ViewEntity } from "typeorm";
       )
       .innerJoin("Spaces", "spaces", "spaces.id = event_occurrences.space_id")
       .leftJoin("Projects", "projects", "projects.id = events.project_id")
-      .leftJoin("Agents", "agents", "agents.id = projects.owner_id")
+      .leftJoin("Agents", "agents", "agents.id = events.owner_id")
       .leftJoin("Agents", "asp", "asp.id = spaces.owner_id")
       .leftJoin("Agents", "apj", "apj.id = projects.owner_id")
       .leftJoin("Spaces", "spp", "spp.id = spaces.parent_id")
