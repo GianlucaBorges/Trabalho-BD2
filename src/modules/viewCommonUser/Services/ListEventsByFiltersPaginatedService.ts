@@ -120,7 +120,7 @@ export default class ListEventsByFiltersPaginatedService {
 
       if (clas_etaria) {
         queryBuilder = queryBuilder.andWhere(
-          "classificacao_etaria = :classificacao_etaria",
+          "classificacao_etaria = :clas_etaria",
           { clas_etaria }
         );
       }
