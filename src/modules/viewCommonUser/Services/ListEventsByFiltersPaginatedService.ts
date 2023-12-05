@@ -6,7 +6,7 @@ import { Spaces } from "../../../entity/Spaces";
 interface IQueryParams {
   page?: number;
   per_page?: number;
-  classificacao_etaria?: string;
+  clas_etaria?: string;
   event_name?: string;
   space_name?: string;
   data_inicio?: Date;
@@ -40,7 +40,7 @@ export default class ListEventsByFiltersPaginatedService {
     const {
       page,
       per_page,
-      classificacao_etaria,
+      clas_etaria,
       event_name,
       space_name,
       data_inicio,
@@ -118,10 +118,10 @@ export default class ListEventsByFiltersPaginatedService {
         );
       }
 
-      if (classificacao_etaria) {
+      if (clas_etaria) {
         queryBuilder = queryBuilder.andWhere(
           "classificacao_etaria = :classificacao_etaria",
-          { classificacao_etaria }
+          { clas_etaria }
         );
       }
 

@@ -5,7 +5,7 @@ import { Spaces } from "../../../entity/Spaces";
 import AppError from "../../../errors/AppError";
 
 interface IQueryParams {
-  classificacao_etaria?: string;
+  clas_etaria?: string;
   event_name?: string;
   space_name?: string;
   data_inicio?: Date;
@@ -27,7 +27,7 @@ interface IQueryParams {
 export default class ListEventsByFiltersService {
   public async execute(queryParams: IQueryParams): Promise<string> {
     const {
-      classificacao_etaria,
+      clas_etaria,
       event_name,
       space_name,
       data_inicio,
@@ -104,10 +104,10 @@ export default class ListEventsByFiltersService {
         );
       }
 
-      if (classificacao_etaria) {
+      if (clas_etaria) {
         queryBuilder = queryBuilder.andWhere(
-          "classificacao_etaria = :classificacao_etaria",
-          { classificacao_etaria }
+          "classificacao_etaria = :clas_etaria",
+          { clas_etaria }
         );
       }
 
@@ -188,25 +188,6 @@ export default class ListEventsByFiltersService {
 
     const listEvents = await queryBuilder.distinct(true)
     .getRawMany();
-
-    // listEvents = listEvents.map((item: any) => {
-    //   return {
-    //     event_name: item.name.trim(),
-    //     short_description: item.short_description
-    //       ? item.short_description.trim()
-    //       : null,
-    //     classificacao_etaria: item.classificacao_etaria,
-    //     starts_on: new Date(item.starts_on).toLocaleDateString("pt-BR", {
-    //       day: "2-digit",
-    //       month: "2-digit",
-    //       year: "numeric",
-    //     }),
-    //     starts_at: item.starts_at,
-    //     ends_at: item.ends_at,
-    //     space_name: item.space_name.trim(),
-    //     location: item.location,
-    //   };
-    // });
 
     const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
