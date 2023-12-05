@@ -18,7 +18,7 @@ export default class ListProjectOwnerNameService {
     listProjectOwnerName = listProjectOwnerName.map((item) => {
       if (item.name !== null) {
         return {
-          name: item.name.trim(),
+          name: item.name,
         };
       }
     });

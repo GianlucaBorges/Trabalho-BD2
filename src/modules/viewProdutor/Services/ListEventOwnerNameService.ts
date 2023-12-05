@@ -17,7 +17,7 @@ export default class ListEventNameService {
 
     listEventName = listEventName.map((item) => {
       return {
-        name: item.name.trim(),
+        name: item.name,
       };
     });
 

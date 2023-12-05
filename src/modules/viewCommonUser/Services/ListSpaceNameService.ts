@@ -17,7 +17,7 @@ export default class ListSpaceNameService {
 
     listSpaceName = listSpaceName.map((item) => {
       return {
-        name: item.name.trim(),
+        name: item.name,
       };
     });
 
