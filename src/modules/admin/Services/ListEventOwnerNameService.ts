@@ -1,27 +1,26 @@
 import { AppDataSource } from "../../../data-source";
-import View_produtor from "../../../entity/View_produtor";
+import { Events } from "../../../entity/Events";
 
-interface IEventOwnerName {
+interface IOwnerEventName {
   name: string;
 }
 
-export default class ListEventOwnerNameService {
-  public async execute(): Promise<IEventOwnerName[]> {
-    let listEventOwnerName = await AppDataSource.getRepository(View_produtor)
-      .createQueryBuilder("view_produtor")
-      .select("dono_evento")
-      .orderBy("dono_evento", "ASC")
+export default class ListEventNameService {
+  public async execute(): Promise<IOwnerEventName[]> {
+    let listEventName = await AppDataSource.getRepository(Events)
+      .createQueryBuilder("events")
+      .innerJoin("Agents", "agents", "agents.id = events.owner")
+      .select("agents.name", "name")
+      .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
-    listEventOwnerName = listEventOwnerName.map((item) => {
-      if (item.dono_evento !== null) {
-        return {
-          name: item.dono_evento.trim(),
-        }
-      }
+    listEventName = listEventName.map((item) => {
+      return {
+        name: item.name.trim(),
+      };
     });
 
-    return listEventOwnerName;
+    return listEventName;
   }
 }

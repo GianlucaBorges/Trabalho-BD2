@@ -46,7 +46,7 @@ export class Projects {
   @Column({ nullable: true })
   @OneToMany(() => Agents, (agent) => agent.id)
   @JoinColumn({ name: "owner_id" })
-  owner: string;
+  owner: number;
 
   @Column("int", { nullable: true, array: true })
   @ManyToOne(() => Events, (event) => event.id)

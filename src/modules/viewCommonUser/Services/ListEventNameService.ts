@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source";
-import View_common_user from "../../../entity/View_common_user";
+import { Events } from "../../../entity/Events";
 
 interface IEventName {
   name: string;
@@ -7,8 +7,8 @@ interface IEventName {
 
 export default class ListEventNameService {
   public async execute(): Promise<IEventName[]> {
-    let listEventName = await AppDataSource.getRepository(View_common_user)
-      .createQueryBuilder("view_common_user")
+    let listEventName = await AppDataSource.getRepository(Events)
+      .createQueryBuilder("events")
       .select("name")
       .orderBy("name", "ASC")
       .distinct(true)
