@@ -30,7 +30,7 @@ interface IQueryParams {
   EventOcurEndsAt?: boolean;
   SpacesName?: boolean;
   SpacesLocation?: boolean;
-  SpaceDescription?: boolean;
+  SpacesDescription?: boolean;
   SpacesTelefone?: boolean;
   SpacesEmail?: boolean;
   SpacesHorarios?: boolean;
@@ -43,7 +43,7 @@ interface IQueryParams {
   ProjectRegistrationTo?: boolean;
   ProjectParent?: boolean;
   ProjectOwner?: boolean;
-  AgentsParent?: boolean;
+  AgentsName?: boolean;
 }
 
 export default class DownloadTableCsvService {
@@ -72,7 +72,7 @@ export default class DownloadTableCsvService {
       EventOcurEndsAt,
       SpacesName,
       SpacesLocation,
-      SpaceDescription,
+      SpacesDescription,
       SpacesTelefone,
       SpacesEmail,
       SpacesHorarios,
@@ -85,7 +85,7 @@ export default class DownloadTableCsvService {
       ProjectRegistrationTo,
       ProjectParent,
       ProjectOwner,
-      AgentsParent,
+      AgentsName,
     } = queryParams;
 
     let queryBuilder = AppDataSource.createQueryBuilder();
@@ -98,31 +98,29 @@ export default class DownloadTableCsvService {
       queryBuilder = queryBuilder.addFrom(Event_occurrences, "event_ocur");
     } else if (project) {
       queryBuilder = queryBuilder.addFrom(Projects, "project");
-    } else if (agents) {
-      queryBuilder = queryBuilder.addFrom(Agents, "agents");
     }
 
     if (events) {
       if (project) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Projects",
           "project",
           "events.project = project.id"
         );
       }
       if (spaces) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Event_occurrences",
           "event_ocur",
           "events.id = event_ocur.event"
         );
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Spaces",
           "spaces",
           "spaces.id = event_ocur.space"
         );
       } else if (eventOcur && !spaces) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Event_occurrences",
           "event_ocur",
           "events.id = event_ocur.event"
@@ -131,19 +129,19 @@ export default class DownloadTableCsvService {
     }
 
     if (spaces && eventOcur && !events) {
-      queryBuilder = queryBuilder.leftJoin(
+      queryBuilder = queryBuilder.innerJoin(
         "Event_occurrences",
         "event_ocur",
         "spaces.id = event_ocur.space"
       );
 
       if (project) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Events",
           "events",
           "events.id = event_ocur.event"
         );
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Projects",
           "project",
           "events.project = project.id"
@@ -151,24 +149,16 @@ export default class DownloadTableCsvService {
       }
     }
 
-    if (eventOcur && project && !events) {
-      queryBuilder = queryBuilder.leftJoin(
+    if (eventOcur && project && !events && !spaces) {
+      queryBuilder = queryBuilder.innerJoin(
         "Events",
         "events",
         "events.id = event_ocur.event"
       );
-      queryBuilder = queryBuilder.leftJoin(
+      queryBuilder = queryBuilder.innerJoin(
         "Projects",
         "project",
         "events.project = project.id"
-      );
-    }
-
-    if (project && agents && !eventOcur) {
-      queryBuilder = queryBuilder.leftJoin(
-        "Agents",
-        "agentsProject",
-        "project.owner = agents.id"
       );
     }
 
@@ -193,7 +183,7 @@ export default class DownloadTableCsvService {
 
       if (clas_etaria) {
         queryBuilder = queryBuilder.andWhere(
-          "classificacao_etaria = :clas_etaria",
+          "events.classificacao_etaria = :clas_etaria",
           { clas_etaria }
         );
       }
@@ -210,10 +200,10 @@ export default class DownloadTableCsvService {
         queryBuilder = queryBuilder.addSelect("spaces.name", "SpacesName");
       }
 
-      if (SpaceDescription) {
+      if (SpacesDescription) {
         queryBuilder = queryBuilder.addSelect(
-          "spaces.description",
-          "SpaceDescription"
+          "spaces.short_description",
+          "SpacesDescription"
         );
       }
 
@@ -326,7 +316,10 @@ export default class DownloadTableCsvService {
       }
 
       if (ProjectParent) {
-        queryBuilder = queryBuilder.addSelect("project.parent", "ProjectParent");
+        queryBuilder = queryBuilder.addSelect(
+          "project.parent",
+          "ProjectParent"
+        );
       }
 
       if (project_name) {
@@ -340,12 +333,20 @@ export default class DownloadTableCsvService {
     }
 
     if (agents) {
-      if (AgentsParent) {
-        queryBuilder = queryBuilder.addSelect("agents.parent", "AgentsParent");
+      if (!events && !spaces && !project) {
+        queryBuilder = queryBuilder.addFrom(Agents, "agents");
       }
 
-      if (EventsOwner) {
-        queryBuilder = queryBuilder.leftJoin(
+      if (AgentsName && !events && !spaces && !project) {
+        queryBuilder.addSelect("agents.name", "AgentsName");
+      }
+
+      if (EventsOwner && events && !AgentsName) {
+        queryBuilder.addSelect("events.owner", "EventsOwner");
+      }
+
+      if (EventsOwner && events && AgentsName) {
+        queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsEvents",
           "events.owner = agentsEvents.id"
@@ -365,8 +366,12 @@ export default class DownloadTableCsvService {
         }
       }
 
-      if (SpacesOwner) {
-        queryBuilder = queryBuilder.leftJoin(
+      if (SpacesOwner && spaces && !AgentsName) {
+        queryBuilder.addSelect("spaces.owner", "SpacesOwner");
+      }
+
+      if (SpacesOwner && spaces && AgentsName) {
+        queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsSpaces",
           "spaces.owner = agentsSpaces.id"
@@ -386,64 +391,39 @@ export default class DownloadTableCsvService {
         }
       }
 
-      if (ProjectOwner) {
+      if (ProjectOwner && project && !AgentsName) {
+        queryBuilder.addSelect("project.owner", "ProjectOwner");
+      }
+
+      if (ProjectOwner && project && AgentsName) {
+        queryBuilder = queryBuilder.innerJoin(
+          "Agents",
+          "agentsProject",
+          "project.owner = agentsProject.id"
+        );
         queryBuilder = queryBuilder.addSelect(
           "agentsProject.name",
           "ProjectOwner"
         );
-      }
 
-      if (dono_projeto) {
-        queryBuilder = queryBuilder.andWhere(
-          "agentsProject.name LIKE :dono_projeto",
-          {
-            dono_projeto,
-          }
-        );
+        if (dono_projeto) {
+          queryBuilder = queryBuilder.andWhere(
+            "agentsProject.name LIKE :dono_projeto",
+            {
+              dono_projeto,
+            }
+          );
+        }
       }
     }
 
     const listEvents = await queryBuilder.distinct(true)
     .getRawMany();
 
-    // listEvents = listEvents.map((item: any) => {
-    //   return {
-    //     event_name: item.name.trim(),
-    //     short_description: item.short_description
-    //       ? item.short_description.trim()
-    //       : null,
-    //     classificacao_etaria: item.classificacao_etaria,
-    //     starts_on: new Date(item.starts_on).toLocaleDateString("pt-BR", {
-    //       day: "2-digit",
-    //       month: "2-digit",
-    //       year: "numeric",
-    //     }),
-    //     starts_at: item.starts_at,
-    //     ends_at: item.ends_at,
-    //     space_name: item.space_name.trim(),
-    //     location: item.location,
-    //     sd_space: item.sd_space ? item.sd_space.trim() : null,
-    //     telefone_espaco: item.telefone_espaco,
-    //     email_espaco: item.email_espaco,
-    //     horario_funcionamento: item.horario_funcionamento,
-    //     project_name: item.project_name ? item.project_name.trim() : null,
-    //     project_short_desc: item.project_short_desc,
-    //     registration_from: item.registration_from,
-    //     registration_to: item.registration_to,
-    //     dono_evento: item.dono_evento ? item.dono_evento.trim() : null,
-    //     dono_projeto: item.dono_projeto ? item.dono_projeto.trim() : null,
-    //     dono_espaco: item.dono_espaco ? item.dono_espaco.trim() : null,
-    //     terms: item.terms,
-    //     parent_space: item.parent_space,
-    //     parent_project: item.parent_project,
-    //     parent_agent: item.parent_agent,
-    //   };
-    // });
-
     const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 
     const csvWriter = createCsvWriter({
-      path: "src/modules/viewProdutor/Usuario_comum.csv",
+      path: "src/modules/viewProdutor/Usuario_produtor.csv",
       header: Object.keys(listEvents[0])
       .map((key) => ({
         id: key,

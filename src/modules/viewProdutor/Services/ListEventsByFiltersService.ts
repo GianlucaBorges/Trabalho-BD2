@@ -104,25 +104,25 @@ export default class ListEventsByFiltersService {
 
     if (events) {
       if (project) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Projects",
           "project",
           "events.project = project.id"
         );
       }
       if (spaces) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Event_occurrences",
           "event_ocur",
           "events.id = event_ocur.event"
         );
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Spaces",
           "spaces",
           "spaces.id = event_ocur.space"
         );
       } else if (eventOcur && !spaces) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Event_occurrences",
           "event_ocur",
           "events.id = event_ocur.event"
@@ -131,19 +131,19 @@ export default class ListEventsByFiltersService {
     }
 
     if (spaces && eventOcur && !events) {
-      queryBuilder = queryBuilder.leftJoin(
+      queryBuilder = queryBuilder.innerJoin(
         "Event_occurrences",
         "event_ocur",
         "spaces.id = event_ocur.space"
       );
 
       if (project) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Events",
           "events",
           "events.id = event_ocur.event"
         );
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Projects",
           "project",
           "events.project = project.id"
@@ -152,12 +152,12 @@ export default class ListEventsByFiltersService {
     }
 
     if (eventOcur && project && !events) {
-      queryBuilder = queryBuilder.leftJoin(
+      queryBuilder = queryBuilder.innerJoin(
         "Events",
         "events",
         "events.id = event_ocur.event"
       );
-      queryBuilder = queryBuilder.leftJoin(
+      queryBuilder = queryBuilder.innerJoin(
         "Projects",
         "project",
         "events.project = project.id"
@@ -341,7 +341,7 @@ export default class ListEventsByFiltersService {
       }
 
       if (EventsOwner && AgentsName) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsEvents",
           "events.owner = agentsEvents.id"
@@ -366,7 +366,7 @@ export default class ListEventsByFiltersService {
       }
 
       if (SpacesOwner && AgentsName) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsSpaces",
           "spaces.owner = agentsSpaces.id"
@@ -391,7 +391,7 @@ export default class ListEventsByFiltersService {
       }
 
       if (ProjectOwner && AgentsName) {
-        queryBuilder = queryBuilder.leftJoin(
+        queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsProject",
           "project.owner = agentsProject.id"

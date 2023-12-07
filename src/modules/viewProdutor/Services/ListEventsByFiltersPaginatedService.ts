@@ -356,11 +356,11 @@ export default class ListEventsByFiltersPaginatedService {
         queryBuilder.addSelect("agents.name", "AgentsName");
       }
 
-      if (EventsOwner && !AgentsName) {
+      if (EventsOwner && events && !AgentsName) {
         queryBuilder.addSelect("events.owner", "EventsOwner");
       }
 
-      if (EventsOwner && AgentsName) {
+      if (EventsOwner && events && AgentsName) {
         queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsEvents",
@@ -381,11 +381,11 @@ export default class ListEventsByFiltersPaginatedService {
         }
       }
 
-      if (SpacesOwner && !AgentsName) {
+      if (SpacesOwner && spaces && !AgentsName) {
         queryBuilder.addSelect("spaces.owner", "SpacesOwner");
       }
 
-      if (SpacesOwner && AgentsName) {
+      if (SpacesOwner && spaces && AgentsName) {
         queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsSpaces",
@@ -406,11 +406,11 @@ export default class ListEventsByFiltersPaginatedService {
         }
       }
 
-      if (ProjectOwner && !AgentsName) {
+      if (ProjectOwner && project && !AgentsName) {
         queryBuilder.addSelect("project.owner", "ProjectOwner");
       }
 
-      if (ProjectOwner && AgentsName) {
+      if (ProjectOwner && project && AgentsName) {
         queryBuilder = queryBuilder.innerJoin(
           "Agents",
           "agentsProject",
@@ -420,15 +420,15 @@ export default class ListEventsByFiltersPaginatedService {
           "agentsProject.name",
           "ProjectOwner"
         );
-      }
 
-      if (dono_projeto) {
-        queryBuilder = queryBuilder.andWhere(
-          "agentsProject.name LIKE :dono_projeto",
-          {
-            dono_projeto,
-          }
-        );
+        if (dono_projeto) {
+          queryBuilder = queryBuilder.andWhere(
+            "agentsProject.name LIKE :dono_projeto",
+            {
+              dono_projeto,
+            }
+          );
+        }
       }
     }
 
