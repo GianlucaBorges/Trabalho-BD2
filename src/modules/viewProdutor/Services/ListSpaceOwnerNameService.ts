@@ -1,5 +1,5 @@
 import { AppDataSource } from "../../../data-source";
-import View_produtor from "../../../entity/View_produtor";
+import { Spaces } from "../../../entity/Spaces";
 
 interface ISpaceOwnerName {
   name: string;
@@ -7,17 +7,18 @@ interface ISpaceOwnerName {
 
 export default class ListSpaceOwnerNameService {
   public async execute(): Promise<ISpaceOwnerName[]> {
-    let listSpaceOwnerName = await AppDataSource.getRepository(View_produtor)
-      .createQueryBuilder("view_produtor")
-      .select("dono_espaco")
-      .orderBy("dono_espaco", "ASC")
+    let listSpaceOwnerName = await AppDataSource.getRepository(Spaces)
+    .createQueryBuilder("spaces")
+    .innerJoin("Agents", "agents", "agents.id = spaces.owner")
+    .select("agents.name", "name")
+    .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
     listSpaceOwnerName = listSpaceOwnerName.map((item) => {
-      if (item.dono_espaco !== null) {
+      if (item.name !== null) {
         return {
-          name: item.dono_espaco.trim(),
+          name: item.name,
         }
       }
     });

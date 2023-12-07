@@ -1,12 +1,12 @@
 import { AppDataSource } from "../../../data-source";
 import { Events } from "../../../entity/Events";
 
-interface IEventName {
+interface IEventsName {
   name: string;
 }
 
-export default class ListEventNameService {
-  public async execute(): Promise<IEventName[]> {
+export default class ListEventsNameService {
+  public async execute(): Promise<IEventsName[]> {
     let listEventName = await AppDataSource.getRepository(Events)
       .createQueryBuilder("events")
       .select("name")

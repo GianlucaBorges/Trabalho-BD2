@@ -1,13 +1,13 @@
 import { AppDataSource } from "../../../data-source";
 import { Events } from "../../../entity/Events";
 
-interface IOwnerEventName {
+interface IOwnerEventsName {
   name: string;
 }
 
-export default class ListEventNameService {
-  public async execute(): Promise<IOwnerEventName[]> {
-    let listEventName = await AppDataSource.getRepository(Events)
+export default class ListEventsOwnerService {
+  public async execute(): Promise<IOwnerEventsName[]> {
+    let listEventsName = await AppDataSource.getRepository(Events)
       .createQueryBuilder("events")
       .innerJoin("Agents", "agents", "agents.id = events.owner")
       .select("agents.name", "name")
@@ -15,12 +15,12 @@ export default class ListEventNameService {
       .distinct(true)
       .getRawMany();
 
-    listEventName = listEventName.map((item) => {
+    listEventsName = listEventsName.map((item) => {
       return {
-        name: item.name.trim(),
+        name: item.name,
       };
     });
 
-    return listEventName;
+    return listEventsName;
   }
 }

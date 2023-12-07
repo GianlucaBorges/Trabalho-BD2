@@ -1,23 +1,23 @@
 import { AppDataSource } from "../../../data-source";
-import View_produtor from "../../../entity/View_produtor";
+import { Projects } from "../../../entity/Projects";
 
 interface IProjectName {
-  project_name: string;
+  name: string;
 }
 
 export default class ListProjectNameService {
   public async execute(): Promise<IProjectName[]> {
-    let listProjectName = await AppDataSource.getRepository(View_produtor)
-      .createQueryBuilder("view_produtor")
-      .select("project_name")
-      .orderBy("project_name", "ASC")
+    let listProjectName = await AppDataSource.getRepository(Projects)
+      .createQueryBuilder("projects")
+      .select("name")
+      .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
     listProjectName = listProjectName.map((item) => {
-      if (item.project_name !== null) {
+      if (item.name !== null) {
         return {
-          name: item.project_name.trim(),
+          name: item.name,
         }
       }
     });

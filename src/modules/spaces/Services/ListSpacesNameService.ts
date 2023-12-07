@@ -1,25 +1,25 @@
 import { AppDataSource } from "../../../data-source";
 import { Spaces } from "../../../entity/Spaces";
 
-interface ISpaceName {
+interface ISpacesName {
   name: string;
 }
 
-export default class ListSpaceNameService {
-  public async execute(): Promise<ISpaceName[]> {
-    let listSpaceName = await AppDataSource.getRepository(Spaces)
+export default class ListSpacesNameService {
+  public async execute(): Promise<ISpacesName[]> {
+    let listSpacesName = await AppDataSource.getRepository(Spaces)
       .createQueryBuilder("spaces")
       .select("name")
       .orderBy("name", "ASC")
       .distinct(true)
       .getRawMany();
 
-    listSpaceName = listSpaceName.map((item) => {
+    listSpacesName = listSpacesName.map((item) => {
       return {
-        name: item.name.trim(),
+        name: item.name,
       };
     });
 
-    return listSpaceName;
+    return listSpacesName;
   }
 }
